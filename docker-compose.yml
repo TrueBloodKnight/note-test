@@ -1,0 +1,24 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notes
+    ports:
+      - "3306:3306"
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    command: npm start
